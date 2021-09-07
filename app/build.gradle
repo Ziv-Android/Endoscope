@@ -1,50 +1,67 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdk 31
 
     defaultConfig {
         applicationId "pl.hypeapp.endoscope"
-        minSdkVersion 16
-        targetSdkVersion 25
-        versionCode 5
-        versionName "1.4"
+        minSdk 21
+        targetSdk 31
+        versionCode 6
+        versionName "1.5"
         multiDexEnabled true
     }
+
     buildTypes {
         release {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
-def androidSupportAppcompatVersion = '25.2.0'
-def androidSupportVersion = '25.2.0'
-def qrCodeReaderViewVersion = '2.0.1'
-def rxPermissionVersion = '0.9.1@aar'
-def thirtyinchVersion = '0.8.0-rc3'
-def butterKnifeVersion = '8.5.1'
-def rxJavaVersion = '1.2.7'
-def rxAndroidVersion = '1.2.1'
+def butterKnifeVersion = '10.2.3'
+def qrCodeReaderViewVersion = '2.0.3'
+def rxPermissionVersion = '0.12'
+def thirtyinchVersion = '1.0.1'
 
 dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.3.0'
+    testImplementation 'junit:junit:4.12'
+
+    implementation "com.jakewharton:butterknife:$butterKnifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterKnifeVersion"
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':libstreaming')
-    compile "com.android.support:appcompat-v7:$androidSupportAppcompatVersion"
-    compile "com.android.support:support-v4:$androidSupportVersion"
-    compile "com.dlazaro66.qrcodereaderview:qrcodereaderview:$qrCodeReaderViewVersion"
-    compile('com.github.kenglxn.QRGen:android:2.2.0') {
+    implementation "com.dlazaro66.qrcodereaderview:qrcodereaderview:$qrCodeReaderViewVersion"
+    implementation('com.github.kenglxn.QRGen:android:2.6.0') {
         exclude group: 'com.google.zxing'
     }
-    compile "com.jakewharton:butterknife:$butterKnifeVersion"
-    compile "com.tbruyelle.rxpermissions:rxpermissions:$rxPermissionVersion"
-    compile "io.reactivex:rxandroid:$rxAndroidVersion"
-    compile "io.reactivex:rxjava:$rxJavaVersion"
-    compile "net.grandcentrix.thirtyinch:thirtyinch:$thirtyinchVersion"
-    compile "net.grandcentrix.thirtyinch:thirtyinch-rx:$thirtyinchVersion"
-    testCompile 'junit:junit:4.12'
+    implementation "com.github.tbruyelle:rxpermissions:$rxPermissionVersion"
+    implementation "io.reactivex:rxjava3:rxandroid:3.0.0"
+    implementation "io.reactivex:rxjava3:rxjava:3.0.4"
+
+    implementation "net.grandcentrix.thirtyinch:thirtyinch:$thirtyinchVersion"
+    implementation "net.grandcentrix.thirtyinch:thirtyinch-rx2:$thirtyinchVersion"
+    implementation "net.grandcentrix.thirtyinch:thirtyinch-logginginterceptor:$thirtyinchVersion"
+    implementation "net.grandcentrix.thirtyinch:thirtyinch-kotlin:$thirtyinchVersion"
+    implementation "net.grandcentrix.thirtyinch:thirtyinch-kotlin-coroutines:$thirtyinchVersion"
+    // Legacy dependencies
+    implementation "net.grandcentrix.thirtyinch:thirtyinch-rx:$thirtyinchVersion"
+
+    implementation project(':libstreaming')
 }
 
 

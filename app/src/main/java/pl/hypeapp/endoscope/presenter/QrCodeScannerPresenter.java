@@ -2,8 +2,10 @@ package pl.hypeapp.endoscope.presenter;
 
 import android.Manifest;
 
-import com.tbruyelle.rxpermissions.Permission;
-import com.tbruyelle.rxpermissions.RxPermissions;
+import androidx.annotation.NonNull;
+
+import com.tbruyelle.rxpermissions3.Permission;
+import com.tbruyelle.rxpermissions3.RxPermissions;
 
 import net.grandcentrix.thirtyinch.TiPresenter;
 import net.grandcentrix.thirtyinch.rx.RxTiPresenterSubscriptionHandler;
@@ -29,14 +31,14 @@ public class QrCodeScannerPresenter extends TiPresenter<QrCodeScannerView> {
     }
 
     @Override
-    protected void onWakeUp() {
-        super.onWakeUp();
+    protected void onAttachView(@NonNull QrCodeScannerView view) {
+        super.onAttachView(view);
         startQrCodeCamera();
     }
 
     @Override
-    protected void onSleep() {
-        super.onSleep();
+    protected void onDetachView() {
+        super.onDetachView();
         stopQrCodeCamera();
     }
 

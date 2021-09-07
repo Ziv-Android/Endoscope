@@ -2,15 +2,16 @@ package pl.hypeapp.endoscope.ui.fragment;
 
 import android.graphics.PointF;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
-import com.tbruyelle.rxpermissions.RxPermissions;
+import com.tbruyelle.rxpermissions3.RxPermissions;
 
 import net.grandcentrix.thirtyinch.TiFragment;
 

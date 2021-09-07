@@ -2,7 +2,8 @@ package pl.hypeapp.endoscope.presenter;
 
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import net.grandcentrix.thirtyinch.TiPresenter;
 

@@ -1,5 +1,7 @@
 package pl.hypeapp.endoscope.presenter;
 
+import androidx.annotation.NonNull;
+
 import net.grandcentrix.thirtyinch.TiPresenter;
 
 import pl.hypeapp.endoscope.util.SettingsPreferencesUtil;
@@ -16,8 +18,8 @@ public class SettingsPresenter extends TiPresenter<SettingsView> {
     }
 
     @Override
-    protected void onWakeUp() {
-        super.onWakeUp();
+    protected void onAttachView(@NonNull SettingsView view) {
+        super.onAttachView(view);
         loadPortPreference();
         loadResolutionPreference();
         loadVideoEncoderPreference();

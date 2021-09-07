@@ -1,10 +1,11 @@
 package pl.hypeapp.endoscope.presenter;
 
 import android.Manifest;
-import android.support.annotation.NonNull;
 
-import com.tbruyelle.rxpermissions.Permission;
-import com.tbruyelle.rxpermissions.RxPermissions;
+import androidx.annotation.NonNull;
+
+import com.tbruyelle.rxpermissions3.Permission;
+import com.tbruyelle.rxpermissions3.RxPermissions;
 
 import net.grandcentrix.thirtyinch.TiPresenter;
 import net.grandcentrix.thirtyinch.rx.RxTiPresenterSubscriptionHandler;

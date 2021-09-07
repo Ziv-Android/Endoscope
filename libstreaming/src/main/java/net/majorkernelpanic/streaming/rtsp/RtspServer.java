@@ -1,21 +1,19 @@
 /*
- * Copyright (C) 2011-2014 GUIGUI Simon, fyhertz@gmail.com
- * 
+ * Copyright (C) 2011-2015 GUIGUI Simon, fyhertz@gmail.com
+ *
  * This file is part of libstreaming (https://github.com/fyhertz/libstreaming)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Spydroid is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * This source code is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this source code; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package net.majorkernelpanic.streaming.rtsp;
@@ -35,7 +33,6 @@ import java.util.Locale;
 import java.util.WeakHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import net.majorkernelpanic.streaming.Session;
 import net.majorkernelpanic.streaming.SessionBuilder;
 import android.app.Service;
@@ -89,12 +86,12 @@ public class RtspServer extends Service {
 	protected SharedPreferences mSharedPreferences;
 	protected boolean mEnabled = true;	
 	protected int mPort = DEFAULT_RTSP_PORT;
-	protected WeakHashMap<Session,Object> mSessions = new WeakHashMap<Session,Object>(2);
+	protected WeakHashMap<Session,Object> mSessions = new WeakHashMap<>(2);
 	
 	private RequestListener mListenerThread;
 	private final IBinder mBinder = new LocalBinder();
 	private boolean mRestart = false;
-	private final LinkedList<CallbackListener> mListeners = new LinkedList<CallbackListener>();
+	private final LinkedList<CallbackListener> mListeners = new LinkedList<>();
 
     /** Credentials for Basic Auth */
     private String mUsername;
@@ -121,7 +118,7 @@ public class RtspServer extends Service {
 	 */
 	public void addCallbackListener(CallbackListener listener) {
 		synchronized (mListeners) {
-			if (mListeners.size() > 0) {
+			if (!mListeners.isEmpty()) {
 				for (CallbackListener cl : mListeners) {
 					if (cl == listener) return;
 				}
@@ -191,8 +188,8 @@ public class RtspServer extends Service {
 			try {
 				mListenerThread.kill();
 				for ( Session session : mSessions.keySet() ) {
-				    if ( session != null ) {
-				    	if (session.isStreaming()) session.stop();
+				    if ( session != null && session.isStreaming() ) {
+						session.stop();
 				    } 
 				}
 			} catch (Exception e) {
@@ -205,8 +202,8 @@ public class RtspServer extends Service {
 	/** Returns whether or not the RTSP server is streaming to some client(s). */
 	public boolean isStreaming() {
 		for ( Session session : mSessions.keySet() ) {
-		    if ( session != null ) {
-		    	if (session.isStreaming()) return true;
+		    if ( session != null && session.isStreaming() ) {
+		    	return true;
 		    } 
 		}
 		return false;
@@ -220,8 +217,8 @@ public class RtspServer extends Service {
 	public long getBitrate() {
 		long bitrate = 0;
 		for ( Session session : mSessions.keySet() ) {
-		    if ( session != null ) {
-		    	if (session.isStreaming()) bitrate += session.getBitrate();
+		    if ( session != null && session.isStreaming() ) {
+		    	bitrate += session.getBitrate();
 		    } 
 		}
 		return bitrate;
@@ -285,7 +282,7 @@ public class RtspServer extends Service {
 
 	protected void postMessage(int id) {
 		synchronized (mListeners) {
-			if (mListeners.size() > 0) {
+			if (!mListeners.isEmpty()) {
 				for (CallbackListener cl : mListeners) {
 					cl.onMessage(this, id);
 				}
@@ -295,7 +292,7 @@ public class RtspServer extends Service {
 	
 	protected void postError(Exception exception, int id) {
 		synchronized (mListeners) {
-			if (mListeners.size() > 0) {
+			if (!mListeners.isEmpty()) {
 				for (CallbackListener cl : mListeners) {
 					cl.onError(this, exception, id);
 				}
@@ -508,7 +505,7 @@ public class RtspServer extends Service {
                         return response;
                     }
 
-                    p = Pattern.compile("client_port=(\\d+)-(\\d+)", Pattern.CASE_INSENSITIVE);
+                    p = Pattern.compile("client_port=(\\d+)(?:-(\\d+))?", Pattern.CASE_INSENSITIVE);
                     m = p.matcher(request.headers.get("transport"));
 
                     if (!m.find()) {
@@ -517,7 +514,11 @@ public class RtspServer extends Service {
                         p2 = ports[1];
                     } else {
                         p1 = Integer.parseInt(m.group(1));
-                        p2 = Integer.parseInt(m.group(2));
+                        if (m.group(2) == null) {
+                            p2 = p1+1;
+                        } else {
+                            p2 = Integer.parseInt(m.group(2));
+                        }
                     }
 
                     ssrc = mSession.getTrack(trackId).getSSRC();
@@ -624,7 +625,7 @@ public class RtspServer extends Service {
 
 		public String method;
 		public String uri;
-		public HashMap<String,String> headers = new HashMap<String,String>();
+		public HashMap<String,String> headers = new HashMap<>();
 
 		/** Parse the method, uri & headers of a RTSP request */
 		public static Request parseRequest(BufferedReader input) throws IOException, IllegalStateException, SocketException {

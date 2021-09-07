@@ -2,7 +2,8 @@ package pl.hypeapp.endoscope.presenter;
 
 import android.nfc.NdefRecord;
 import android.os.Build;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import net.grandcentrix.thirtyinch.TiPresenter;
 
